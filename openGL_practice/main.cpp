@@ -11,6 +11,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <cmath>
+
 using namespace std;
 
 const GLint WIDTH {800}, HEIGHT {600};
@@ -24,9 +26,10 @@ const char *vertexShaderSource = "#version 330 core\n"
 
 const char *fragmentShaderSource = "#version 330 core\n"
                                     "out vec4 FragColor;\n"
+                                    "uniform vec4 ourColor;\n"
                                     "void main()\n"
                                     "{\n"
-                                    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+                                    "   FragColor = ourColor;\n"
                                     "}\n\0";
 
 // Define main function
@@ -137,6 +140,10 @@ int main()
 //        0, 1, 3,  // first Triangle
 //        1, 2, 3   // second Triangle
     };
+    
+//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -179,6 +186,13 @@ int main()
         
         // draw our first triangle
         glUseProgram(shaderProgram);
+        
+        // update the uniform color
+        float timeValue = glfwGetTime();
+        float greenValue = sin(timeValue) / 2.0f + 0.5f;
+        int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f); // update the color before drawing the elements
+        
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         //glDrawArrays(GL_TRIANGLES, 0, 6);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
