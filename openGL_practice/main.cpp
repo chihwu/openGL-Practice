@@ -45,7 +45,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+//glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 int main()
 {
@@ -156,7 +156,8 @@ int main()
     };
     // positions of the point lights
     glm::vec3 pointLightPositions[] = {
-        glm::vec3( 0.7f,  0.2f,  2.0f),
+//        glm::vec3( 0.7f,  0.2f,  2.0f),
+        glm::vec3( 1.0f,  0.0f,  0.0f),
         glm::vec3( 2.3f, -3.3f, -4.0f),
         glm::vec3(-4.0f,  2.0f, -12.0f),
         glm::vec3( 0.0f,  0.0f, -3.0f)
@@ -164,12 +165,12 @@ int main()
     // first, configure the cube's VAO (and VBO)
     unsigned int VBO, cubeVAO;
     glGenVertexArrays(1, &cubeVAO);
-    glGenBuffers(1, &VBO);
+    glBindVertexArray(cubeVAO);
     
+    glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     
-    glBindVertexArray(cubeVAO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
@@ -181,8 +182,9 @@ int main()
     unsigned int lightVAO;
     glGenVertexArrays(1, &lightVAO);
     glBindVertexArray(lightVAO);
-    
+
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    
     // note that we update the lamp's position attribute's stride to reflect the updated buffer data
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -195,7 +197,7 @@ int main()
     // shader configuration
     // --------------------
     lightingShader.use();
-    lightingShader.setInt("material.diffuse", 0);
+    lightingShader.setInt("material.diffuse", 0);  // set the texture unit and assign value to the sampler in the fragment shader
     lightingShader.setInt("material.specular", 1);
     
     
@@ -289,11 +291,11 @@ int main()
         lightingShader.setMat4("model", model);
         
         // bind diffuse map
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, diffuseMap);
+        glActiveTexture(GL_TEXTURE0); // by calling this function, we define a location value(texture unit) for a texture object (page 67)
+        glBindTexture(GL_TEXTURE_2D, diffuseMap); // the bind function will automatically bind the texture to the currently active texture unit
         // bind specular map
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, specularMap);
+        glBindTexture(GL_TEXTURE_2D, specularMap); // note: the order of the bind function here matters!! It should correspond with the samplers defined in the fragment shader
         
         // render containers
         glBindVertexArray(cubeVAO);
@@ -403,30 +405,30 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 unsigned int loadTexture(char const * path)
 {
     unsigned int textureID;
-    glGenTextures(1, &textureID);
+    glGenTextures(1, &textureID); // glGenTextures takes the first parameter (the number of textures it needs to generate) ,and generate and store texture ids of int array in the second parameter
     
-    int width, height, nrComponents;
-    unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
+    int width, height, nrChannels;
+    unsigned char *data = stbi_load(path, &width, &height, &nrChannels, 0);
     if (data)
     {
         GLenum format;
-        if (nrComponents == 1)
+        if (nrChannels == 1)
             format = GL_RED;
-        else if (nrComponents == 3)
+        else if (nrChannels == 3)
             format = GL_RGB;
-        else if (nrComponents == 4)
+        else if (nrChannels == 4)
             format = GL_RGBA;
         
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-        
+        glBindTexture(GL_TEXTURE_2D, textureID); // the bind command makes any subsequent texture calls be applied to the currently bound texture
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);   // NEAREST vs LINEAR
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         
-        stbi_image_free(data);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data); // once this function is called, the bound texture object will have the texture image attached to it. (the first argument specifies the texture target)
+        glGenerateMipmap(GL_TEXTURE_2D); // once we create the texture, we can use this function to generate a complete set of mipmaps for the bound texture
+        
+        stbi_image_free(data);  // it is good practice to free the image data since the texture object is already created
     }
     else
     {

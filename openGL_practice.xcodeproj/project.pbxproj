@@ -36,8 +36,6 @@
 		0F00D7C224689609002DAEC6 /* multiple_lights.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = multiple_lights.fs; sourceTree = "<group>"; };
 		0F00D7C32468961A002DAEC6 /* lamp.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = lamp.vs; sourceTree = "<group>"; };
 		0F00D7C424689628002DAEC6 /* lamp.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = lamp.fs; sourceTree = "<group>"; };
-		0F00D7C52468A8D8002DAEC6 /* 6.multiple_lights.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 6.multiple_lights.vs; sourceTree = "<group>"; };
-		0F00D7C62468A917002DAEC6 /* 6.multiple_lights.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 6.multiple_lights.fs; sourceTree = "<group>"; };
 		0F8F878A244D2ED500BD0010 /* openGL_practice */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = openGL_practice; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F8F878D244D2ED500BD0010 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		0F8F8795244D301E00BD0010 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -89,8 +87,6 @@
 				0F00D7C224689609002DAEC6 /* multiple_lights.fs */,
 				0F00D7C32468961A002DAEC6 /* lamp.vs */,
 				0F00D7C424689628002DAEC6 /* lamp.fs */,
-				0F00D7C52468A8D8002DAEC6 /* 6.multiple_lights.vs */,
-				0F00D7C62468A917002DAEC6 /* 6.multiple_lights.fs */,
 			);
 			path = openGL_practice;
 			sourceTree = "<group>";
