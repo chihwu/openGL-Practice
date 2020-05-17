@@ -16,8 +16,10 @@ enum Camera_Movement {
 };
 
 // Default camera values
-const float YAW         = -90.0f;
-const float PITCH       =  0.0f;
+// NOTE: a Euler angles value (pitch, yaw, roll) can be used to represent any rotation
+const float YAW         = -90.0f; // rotate around the y axis of the object's coordinate space
+const float PITCH       =  0.0f;  // rotate around the x axis of the object's coordinate space
+                                  // For ROLL, it rotates around the z axis of the object's coordinate space
 const float SPEED       =  2.5f;
 const float SENSITIVITY =  0.1f;
 const float ZOOM        =  45.0f;
@@ -63,7 +65,7 @@ public:
     // Returns the view matrix calculated using Euler Angles and the LookAt Matrix
     glm::mat4 GetViewMatrix()
     {
-        return glm::lookAt(Position, Position + Front, Up);
+        return glm::lookAt(Position, Position + Front, Up); // lookat() takes parameters (camera position, target position, up vector)
     }
     
     // Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
@@ -105,7 +107,7 @@ public:
     // Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
     void ProcessMouseScroll(float yoffset)
     {
-        if (Zoom >= 1.0f && Zoom <= 45.0f)
+        if (Zoom >= 1.0f && Zoom <= 45.0f) // zoom here represents fov(field of view) and normally it is 45 degrees by nature
             Zoom -= yoffset;
         if (Zoom <= 1.0f)
             Zoom = 1.0f;

@@ -41,7 +41,7 @@ float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 
 // timing
-float deltaTime = 0.0f;
+float deltaTime = 0.0f;  // In practice different processing powers will draw different number of frames in each second. To ensure the consistent speed of drawing frames for different users, the deltaTime is used to store the time it takes to render the last frame, so for the user whose frame is taking more time to render, the moving speed will be much larger
 float lastFrame = 0.0f;
 
 // lighting
@@ -183,6 +183,7 @@ int main()
     glGenVertexArrays(1, &lightVAO);
     glBindVertexArray(lightVAO);
 
+    // Here we only need to bind to the VBO, the container's VBO's data already contains the correct data
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     
     // note that we update the lamp's position attribute's stride to reflect the updated buffer data
@@ -281,7 +282,8 @@ int main()
         lightingShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
         
         // view/projection transformations
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        // Note: normally we set the near parameter to be 0.1f and far parameter to be 100.0f in both glm::perspective and glm::ortho
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f); // we update the perspective project matrix to the GPU each render iteration with the zoom level
         glm::mat4 view = camera.GetViewMatrix();
         lightingShader.setMat4("projection", projection);
         lightingShader.setMat4("view", view);
@@ -302,8 +304,9 @@ int main()
         for (unsigned int i = 0; i < 10; i++)
         {
             // calculate the model matrix for each object and pass it to shader before drawing
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, cubePositions[i]);
+            glm::mat4 model = glm::mat4(1.0f);  // identity matrix
+            // IMPORTANT: typical order for transformation is: TransformedVector = TranslationMatrix * RotationMatrix * ScaleMatrix * OriginalVector; But the implementation order is reversed.
+            model = glm::translate(model, cubePositions[i]);  // the second parameter of glm::translate() represent the transition vector for x, y, z axis and it is normally the 4th column of the 4x4 matrix. Note: the mat4[4][4] is normally 1.
             float angle = 20.0f * i;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
             lightingShader.setMat4("model", model);
@@ -321,8 +324,9 @@ int main()
         for (unsigned int i = 0; i < 4; i++)
         {
             model = glm::mat4(1.0f);
+            // IMPORTANT: typical order for transformation is: TransformedVector = TranslationMatrix * RotationMatrix * ScaleMatrix * OriginalVector; But the implementation order is reversed.
             model = glm::translate(model, pointLightPositions[i]);
-            model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+            model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube. Note: glm::vec3(0.2f) is same as glm::vec3(0.2f, 0.2f, 0.2f)
             lampShader.setMat4("model", model);
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
@@ -374,10 +378,11 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 // glfw: whenever the mouse moves, this callback is called
+// NOTE: here we try to trieve the mouse movements for the values of pitch and yaw
 // -------------------------------------------------------
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-    if (firstMouse)
+    if (firstMouse) // without this if block, there will be a sudden jump for camera view whenever the window is first rendered due to the initial xpos and ypos poistions equal to the location your mouse entered the screen
     {
         lastX = xpos;
         lastY = ypos;
@@ -397,7 +402,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 // ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    camera.ProcessMouseScroll(yoffset);
+    camera.ProcessMouseScroll(yoffset); // when scrolling, the yoffset value represents the amount we scrolled vertically
 }
 
 // utility function for loading a 2D texture from file
