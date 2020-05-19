@@ -92,8 +92,9 @@ int main()
     
     // build and compile our shader zprogram
     // ------------------------------------
-    Shader lightingShader("multiple_lights.vs", "multiple_lights.fs");
-    Shader lampShader("lamp.vs", "lamp.fs");
+    // IMPORTANT: for all the concetps of lights we have talked about, one can think them as just different ways of adding colors to the objects we want to render
+    Shader lightingShader("multiple_lights.vs", "multiple_lights.fs"); // IMPORTANT: note that all lights and textures of objects are rendered using this shader
+    Shader lampShader("lamp.vs", "lamp.fs"); // the reason that here we separate the lampShader from the lightingShader because in the lightShader we also handle the texture rendering of the objects but in the lampShader we only want to render some simple white cubes as point light sources so we avoid any unneeded code in lampShader
     
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -192,14 +193,14 @@ int main()
     
     // load textures (we now use a utility function to keep the code more organized)
     // -----------------------------------------------------------------------------
-    unsigned int diffuseMap = loadTexture(FileSystem::getPath("resources/textures/container2.png").c_str());
+    unsigned int diffuseMap = loadTexture(FileSystem::getPath("resources/textures/container2.png").c_str()); // in lighted scenes, diffuse map uses an image to wrap around an object that we can index for unique color values per fragment since a texture image represents all of the object's diffuse colors
     unsigned int specularMap = loadTexture(FileSystem::getPath("resources/textures/container2_specular.png").c_str());
     
     // shader configuration
     // --------------------
     lightingShader.use();
-    lightingShader.setInt("material.diffuse", 0);  // set the texture unit and assign value to the sampler in the fragment shader
-    lightingShader.setInt("material.specular", 1);
+    lightingShader.setInt("material.diffuse", 0);  // set the texture unit and assign value to the uniform sampler in the fragment shader
+    lightingShader.setInt("material.specular", 1); // since we are using another texture sampler in the same fragment shader we have to use a different texture unit
     
     
     // render loop
@@ -223,7 +224,7 @@ int main()
         
         // be sure to activate shader when setting uniforms/drawing objects
         lightingShader.use();
-        lightingShader.setVec3("viewPos", camera.Position);
+        lightingShader.setVec3("viewPos", camera.Position); // camera position is just the viewer position
         lightingShader.setFloat("material.shininess", 32.0f);
         
         /*
@@ -233,7 +234,8 @@ int main()
          by using 'Uniform buffer objects', but that is something we'll discuss in the 'Advanced GLSL' tutorial.
          */
         // directional light
-        lightingShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+        // Note: here we define only one directional light since a directional light normally serves as a global light
+        lightingShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f); // Note: here the directional light is represented by a direction vector and the directional light in this case is defined to point downward
         lightingShader.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
         lightingShader.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
         lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
