@@ -302,7 +302,7 @@ int main()
         glBindTexture(GL_TEXTURE_2D, specularMap); // note: the order of the bind function here matters!! It should correspond with the samplers defined in the fragment shader
         
         // render containers
-        glBindVertexArray(cubeVAO);
+        glBindVertexArray(cubeVAO); // the binding of the vertex data here allows the lighting Shader below to draw the object cubes
         for (unsigned int i = 0; i < 10; i++)
         {
             // calculate the model matrix for each object and pass it to shader before drawing
@@ -322,7 +322,7 @@ int main()
         lampShader.setMat4("view", view);
         
         // we now draw as many light bulbs as we have point lights.
-        glBindVertexArray(lightVAO);
+        glBindVertexArray(lightVAO);  // the binding of the vertex data here allows the lighting Shader below to draw the light source cubes
         for (unsigned int i = 0; i < 4; i++)
         {
             model = glm::mat4(1.0f);
