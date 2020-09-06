@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F6E2F26247A4C6100574CED /* libassimp.5.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F6E2F24247A4B6700574CED /* libassimp.5.0.0.dylib */; };
 		0F8F878E244D2ED500BD0010 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F878D244D2ED500BD0010 /* main.cpp */; };
 		0F8F8796244D301E00BD0010 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F8F8795244D301E00BD0010 /* OpenGL.framework */; };
 		0F8F8798244D318400BD0010 /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F8F8797244D318400BD0010 /* libglfw.3.3.dylib */; };
@@ -26,6 +27,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0F324F8E247A5545009BC6D5 /* model_loading.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = model_loading.fs; sourceTree = "<group>"; };
+		0F324F8F247A55E3009BC6D5 /* model_loading.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = model_loading.vs; sourceTree = "<group>"; };
+		0F4CF1C42474E7BD006D2E12 /* shader_m.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shader_m.h; sourceTree = "<group>"; };
+		0F4CF1C52474E7DA006D2E12 /* camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
+		0F4CF1C62474E810006D2E12 /* model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = model.h; sourceTree = "<group>"; };
+		0F4CF1C72474E865006D2E12 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
+		0F4CF1C82474E8E7006D2E12 /* mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mesh.h; sourceTree = "<group>"; };
+		0F6E2F1B2474E94200574CED /* shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shader.h; sourceTree = "<group>"; };
+		0F6E2F1C2474EA1900574CED /* filesystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = filesystem.h; sourceTree = "<group>"; };
+		0F6E2F1D2474EA8600574CED /* root_directory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = root_directory.h; sourceTree = "<group>"; };
+		0F6E2F1E247A484500574CED /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		0F6E2F20247A496F00574CED /* libassimp.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.dylib; path = ../../../../usr/local/lib/libassimp.dylib; sourceTree = "<group>"; };
+		0F6E2F22247A49C100574CED /* libassimp.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.5.dylib; path = ../../../../usr/local/lib/libassimp.5.dylib; sourceTree = "<group>"; };
+		0F6E2F24247A4B6700574CED /* libassimp.5.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.5.0.0.dylib; path = ../../../../usr/local/lib/libassimp.5.0.0.dylib; sourceTree = "<group>"; };
 		0F8F878A244D2ED500BD0010 /* openGL_practice */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = openGL_practice; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F8F878D244D2ED500BD0010 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		0F8F8795244D301E00BD0010 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -41,6 +56,7 @@
 				0F8F8796244D301E00BD0010 /* OpenGL.framework in Frameworks */,
 				0F8F879A244D319900BD0010 /* libGLEW.2.1.0.dylib in Frameworks */,
 				0F8F8798244D318400BD0010 /* libglfw.3.3.dylib in Frameworks */,
+				0F6E2F26247A4C6100574CED /* libassimp.5.0.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +84,16 @@
 			isa = PBXGroup;
 			children = (
 				0F8F878D244D2ED500BD0010 /* main.cpp */,
+				0F4CF1C62474E810006D2E12 /* model.h */,
+				0F4CF1C42474E7BD006D2E12 /* shader_m.h */,
+				0F4CF1C52474E7DA006D2E12 /* camera.h */,
+				0F4CF1C72474E865006D2E12 /* stb_image.h */,
+				0F4CF1C82474E8E7006D2E12 /* mesh.h */,
+				0F6E2F1B2474E94200574CED /* shader.h */,
+				0F6E2F1C2474EA1900574CED /* filesystem.h */,
+				0F6E2F1D2474EA8600574CED /* root_directory.h */,
+				0F324F8E247A5545009BC6D5 /* model_loading.fs */,
+				0F324F8F247A55E3009BC6D5 /* model_loading.vs */,
 			);
 			path = openGL_practice;
 			sourceTree = "<group>";
@@ -75,6 +101,10 @@
 		0F8F8794244D301E00BD0010 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0F6E2F24247A4B6700574CED /* libassimp.5.0.0.dylib */,
+				0F6E2F22247A49C100574CED /* libassimp.5.dylib */,
+				0F6E2F20247A496F00574CED /* libassimp.dylib */,
+				0F6E2F1E247A484500574CED /* Accelerate.framework */,
 				0F8F8799244D319900BD0010 /* libGLEW.2.1.0.dylib */,
 				0F8F8797244D318400BD0010 /* libglfw.3.3.dylib */,
 				0F8F8795244D301E00BD0010 /* OpenGL.framework */,
@@ -196,6 +226,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -248,6 +280,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;

@@ -78,7 +78,7 @@ int main()
     }
     
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); // when the window is first displayed, framebuffer_size_callback will be called as well as when every time the window is resized. We register the callback functions after we've created the window and before the game loop in initiated.
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
     
@@ -110,6 +110,8 @@ int main()
 
     while(!glfwWindowShouldClose(window))
     {
+        // IMPORTANT: all the rendering commands should be in the render loop since we want to execute all the rednering commands in each iteration of the loop.
+        
         // per-frame time logic
         // --------------------
         float currentFrame = glfwGetTime();
@@ -122,8 +124,8 @@ int main()
         
         // render
         // ------
-        glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(0.05f, 0.05f, 0.05f, 1.0f); // Whenever we call glClear and clear the color buffer, the entire color buffer will be filled with the color as configured by glClearColor
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // At the start of each render iteration we always want to clear the screen otherwise we would still see the results from the previous iteration
         
         // don't forget to enable shader before setting uniforms
         ourShader.use();
@@ -144,8 +146,8 @@ int main()
         
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        glfwSwapBuffers(window);  // this will swap the color buffer (a large buffer that contains color values for each pixel in GLFW's window) that has been used to draw in during this iteration and show it as output to the screen. (Double buffers are used to avoid flickering issues.)
+        glfwPollEvents();  // this checks if any events are triggered (like keyboard input or mouse movement events), updates the window state, and calls the corresponding functions such as callback methods.
     }
     
     glfwTerminate();
@@ -155,7 +157,7 @@ int main()
 
 void processInput(GLFWwindow *window)
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) // if it not pressed glfwGetKey returns GLFW_RELEASE
         glfwSetWindowShouldClose(window, true);
     
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
