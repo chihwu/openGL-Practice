@@ -71,6 +71,7 @@ private:
         // process each mesh located at the current node
         for(unsigned int i = 0; i < node->mNumMeshes; i++)
         {
+            // each node contains a set of mesh indices where each index points to a specific mesh located in the scene object.
             // the node object only contains indices to index the actual objects in the scene.
             // the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
@@ -86,6 +87,11 @@ private:
     
     Mesh processMesh(aiMesh *mesh, const aiScene *scene)
     {
+        // Processing a mesh basically consists of 3 sections:
+        //    1.retrieving all the vertex data
+        //    2.retrieving the mesh's indices
+        //    3.finally retrieving the relevant material data
+        
         // data to fill
         vector<Vertex> vertices;
         vector<unsigned int> indices;

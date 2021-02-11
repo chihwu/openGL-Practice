@@ -59,10 +59,12 @@ int main()
     }
     
     // Define version and compatibility settings
+    // Since the focus of this website is on OpenGL version 3.3, we'd like to tell GLFW that 3.3 is the OpenGL version we want to use. This way GLFW can make the proper arrangements when creating the OpenGL context.
+    // This ensures that when an user does not have the proper OpenGL version GLFW fails to run
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);  // Core Profile indicates that the code won't be backward compatible
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);   // allow forward compatibility
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);  // Core Profile indicates that the code won't be backward compatible and we will only access to a smaller subset of OpenGL features
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);   // This line is required on Mac OS and it allows forward compatibility
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     
     // Create OpenGL window and context
@@ -76,8 +78,8 @@ int main()
         glfwTerminate();
         return 1;
     }
+    glfwMakeContextCurrent(window);  // Here we tell GLFW to make the context of our window the main context on the current thread
     
-    glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); // when the window is first displayed, framebuffer_size_callback will be called as well as when every time the window is resized. We register the callback functions after we've created the window and before the game loop in initiated.
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
@@ -108,7 +110,8 @@ int main()
     // -----------
     Model ourModel(FileSystem::getPath("LibertStatue.obj"));
 
-    while(!glfwWindowShouldClose(window))
+    // this while loop is called the render loop
+    while(!glfwWindowShouldClose(window))  // The glfwWindowShouldClose() function checks at the start of each loop ireration if GLFW has been instructed to close. If a window should be closed is based on the returned value from the function glfwSetwindowShouldClose()
     {
         // IMPORTANT: all the rendering commands should be in the render loop since we want to execute all the rednering commands in each iteration of the loop.
         
@@ -124,7 +127,8 @@ int main()
         
         // render
         // ------
-        glClearColor(0.05f, 0.05f, 0.05f, 1.0f); // Whenever we call glClear and clear the color buffer, the entire color buffer will be filled with the color as configured by glClearColor
+        // At the start of each render iteration we always want to clear the screen otherwise we would still see the results from the previous iteration
+        glClearColor(0.05f, 0.05f, 0.05f, 1.0f); // Whenever we call glClear and clear the color buffer, the entire color buffer will be filled with the color as configured by glClearColor(), so this should be set before the glClear() is called
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // At the start of each render iteration we always want to clear the screen otherwise we would still see the results from the previous iteration
         
         // don't forget to enable shader before setting uniforms
@@ -150,7 +154,7 @@ int main()
         glfwPollEvents();  // this checks if any events are triggered (like keyboard input or mouse movement events), updates the window state, and calls the corresponding functions such as callback methods.
     }
     
-    glfwTerminate();
+    glfwTerminate(); // as soon as we exit the render loop we would like to properly clean/delete all resources thar were allocated using this glfwTerminate()
     
     return 0;
 }
@@ -171,11 +175,12 @@ void processInput(GLFWwindow *window)
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
+// Whenever the window changes in size, GLFW calls this function and fills in the proper arguments for you to process
 // ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    // make sure the viewport matches the new window dimensions; note that width and
-    // height will be significantly larger than specified on retina displays.
+    // make sure the viewport matches the new window dimensions; note that width and height will be significantly larger than the original input values for retina displays.
+    // The first two parameters of glViewport set the location of the lower left corner of the window. The third and fourth parameter set the width and height of the rendering window in pixels.
     glViewport(0, 0, width, height);
 }
 
